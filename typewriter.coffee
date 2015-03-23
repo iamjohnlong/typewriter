@@ -39,15 +39,19 @@ module.exports = class TypeWriter
   _startSentence: (sentence, callback)->
     sentenceLength = sentence.length - 1
     sentence.forEach (letter, idx)=>
-      timeOut = 100 * idx
       setTimeout (=>
         @fullSentence += letter.letter
         @el.innerHTML = @fullSentence
         callback() if sentenceLength is idx
-      ), timeOut
+      ), @_rando(idx)
 
   _done: (done)->
     if done
       if typeof @_doneFn is 'function'
         @_doneFn()
     return done
+  
+  _rando: (i)->
+    timeOut = (120 * i) + (Math.floor(Math.random() * 100))
+    console.log timeOut
+    return timeOut
