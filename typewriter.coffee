@@ -31,14 +31,10 @@ module.exports = class TypeWriter
       @fullSentence += ' '
       @fullSentence += '<br>' if @config[@currentIndex].break
       @fullSentence = "" if @config[@currentIndex].clearAll
-      if @config[@currentIndex].wait
-        setTimeout (=>
-          @currentIndex++
-          @_type(words)
-        ), @config[@currentIndex].wait
-      else
+      setTimeout (=>
         @currentIndex++
         @_type(words)
+      ), @config[@currentIndex].wait or 220
 
   _startSentence: (sentence, callback)->
     sentenceLength = sentence.length - 1
