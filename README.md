@@ -1,6 +1,6 @@
 # TypeWriter
 
-A Class write out text to the dom.
+A Class write out text to a DOM Node.
 
 ```coffee
 
@@ -32,6 +32,6 @@ typeWriter.done (->
 typeWriter2.done ->
   console.log 'all done'
   return
-  
+
 
 ```
