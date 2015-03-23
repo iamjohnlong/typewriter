@@ -11,15 +11,27 @@ writer = [
   {
     words: 'and...'
     break: true
+    wait: 3000
+    clearAll: true
+  }
+  { 
+    words: 'I like beer' 
   }
   {
-    words: 'I like to party'
-    clearAll: true
-    wait: 4000
+    words: 'and...'
+    wait: 1000
   }
-  { words: 'with booze...' }
+  { words: 'I have a wife and child' }
+  {
+    words: 'plus...'
+    wait: 1000
+  }
+  {
+    words: 'Writing code is pretty fun.' 
+  }
+
 ]
-writer2 = [ { words: 'I live in Salt Lake City, Utah' } ]
+writer2 = [ { words: 'Also, I live in Salt Lake City, Utah' } ]
 
 typeWriter = new TypeWriter(writer, document.getElementById('para'))
 typeWriter2 = new TypeWriter(writer2, document.getElementById('para'))
@@ -27,11 +39,10 @@ typeWriter2 = new TypeWriter(writer2, document.getElementById('para'))
 typeWriter.start()
 typeWriter.done (->
   typeWriter2.start()
-  return
-), 3000
+), 2250
+
 typeWriter2.done ->
   console.log 'all done'
-  return
 
 
 ```

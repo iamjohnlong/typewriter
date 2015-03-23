@@ -16,7 +16,6 @@ module.exports = class TypeWriter
       ), wait
 
   _setup: (config)->
-    
     wordConfigs = config.map (obj, wordIndex)=>
       letters = []
       words = obj.words.split("")
@@ -27,14 +26,11 @@ module.exports = class TypeWriter
     return wordConfigs
           
   _type: (words)=>
-
     return if @_done(@totalLength is @currentIndex)
-
     @_startSentence words[@currentIndex], =>
       @fullSentence += ' '
       @fullSentence += '<br>' if @config[@currentIndex].break
       @fullSentence = "" if @config[@currentIndex].clearAll
-      
       if @config[@currentIndex].wait
         setTimeout (=>
           @currentIndex++
@@ -47,11 +43,12 @@ module.exports = class TypeWriter
   _startSentence: (sentence, callback)->
     sentenceLength = sentence.length - 1
     sentence.forEach (letter, idx)=>
+      timeOut = 100 * idx
       setTimeout (=>
         @fullSentence += letter.letter
         @el.innerHTML = @fullSentence
         callback() if sentenceLength is idx
-      ), 100 * idx
+      ), timeOut
 
   _done: (done)->
     if done
