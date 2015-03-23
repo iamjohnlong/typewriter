@@ -3,6 +3,8 @@ module.exports = class TypeWriter
     @fullSentence = ""
     @el = el
     @config = config
+    @currentIndex = 0
+    @totalLength = config.length
 
   start: ()->
     @_type @_setup(@config)
@@ -14,45 +16,45 @@ module.exports = class TypeWriter
       ), wait
 
   _setup: (config)->
-    prevTime = 0
-    currTime = 0
-    wordConfigs = config.map (obj)=>
-      timeOut = []
-      prevTime += currTime
-      currTime = 0
+    
+    wordConfigs = config.map (obj, wordIndex)=>
+      letters = []
       words = obj.words.split("")
       words.forEach (word, i)->
-        t = 90 * i
-        currTime = obj.wait or t + 320
-        timeOut.push 
-          timeout: t
+        letters.push
           letter: word
-      timeOut.push
-        totalTime: currTime
-        waitTime: prevTime
-        break: obj.break
-        clearAll: obj.clearAll
-      return timeOut
+      return letters
     return wordConfigs
           
   _type: (words)=>
-    wordsLength = words.length - 1
-    words.forEach (sentence, i)=>
-      timers = sentence.pop()
-      sentenceLength = sentence.length - 1
+
+    return if @_done(@totalLength is @currentIndex)
+
+    @_startSentence words[@currentIndex], =>
+      @fullSentence += ' '
+      @fullSentence += '<br>' if @config[@currentIndex].break
+      @fullSentence = "" if @config[@currentIndex].clearAll
+      
+      if @config[@currentIndex].wait
+        setTimeout (=>
+          @currentIndex++
+          @_type(words)
+        ), @config[@currentIndex].wait
+      else
+        @currentIndex++
+        @_type(words)
+
+  _startSentence: (sentence, callback)->
+    sentenceLength = sentence.length - 1
+    sentence.forEach (letter, idx)=>
       setTimeout (=>
-        sentence.forEach (letter, idx)=>
-          setTimeout (=>
-            @fullSentence += letter.letter
-            @el.innerHTML = @fullSentence
-            if sentenceLength is idx
-              @fullSentence += ' '
-            if sentenceLength is idx && timers.break
-              @fullSentence += '<br>'
-            if sentenceLength is idx && timers.clearAll
-              @fullSentence = ''
-            if sentenceLength is idx && wordsLength is i
-              if typeof @_doneFn is 'function'
-                @_doneFn()
-          ), letter.timeout
-      ), timers.waitTime
+        @fullSentence += letter.letter
+        @el.innerHTML = @fullSentence
+        callback() if sentenceLength is idx
+      ), 100 * idx
+
+  _done: (done)->
+    if done
+      if typeof @_doneFn is 'function'
+        @_doneFn()
+    return done
