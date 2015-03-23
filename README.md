@@ -1,6 +1,6 @@
 # TypeWriter
 
-A Class write out text to a DOM Node.
+A Class that writes out text to a DOM Node.
 
 ```coffee
 
