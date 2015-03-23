@@ -1,8 +1,8 @@
 module.exports = class TypeWriter
-  constructor: (arr, el)->
+  constructor: (config, el)->
     @fullSentence = ""
     @el = el
-    @config = arr
+    @config = config
 
   start: ()->
     @_type @_setup(@config)
@@ -13,10 +13,10 @@ module.exports = class TypeWriter
         doneFn()
       ), wait
 
-  _setup: (arr)->
+  _setup: (config)->
     prevTime = 0
     currTime = 0
-    times = arr.map (obj)=>
+    wordConfigs = config.map (obj)=>
       timeOut = []
       prevTime += currTime
       currTime = 0
@@ -33,7 +33,7 @@ module.exports = class TypeWriter
         break: obj.break
         clearAll: obj.clearAll
       return timeOut
-    return times
+    return wordConfigs
           
   _type: (words)=>
     wordsLength = words.length - 1
