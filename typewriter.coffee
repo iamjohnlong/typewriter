@@ -53,5 +53,4 @@ module.exports = class TypeWriter
   
   _rando: (i)->
     timeOut = (120 * i) + (Math.floor(Math.random() * 100))
-    console.log timeOut
     return timeOut
